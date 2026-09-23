@@ -41,9 +41,12 @@ function checkpoint(level,title,message){
   $('levelOverlay').hidden=false;confetti(75);fanfare();$('nextStage').focus();
 }
 $('nextStage').addEventListener('click',()=>{$('levelOverlay').hidden=true;if(stage===1){showScreen('memoryScreen');newMemory()}else if(stage===2){showScreen('tetrisScreen');drawTetris()}else{showScreen('finalScreen');confetti(95)}});
+let counting=false;
 function countdown(callback){
+  if(counting)return;
+  counting=true;
   const layer=$('countdown'),label=$('countdownValue');layer.hidden=false;let value=3;label.textContent=value;tone(420,.09);
-  const tick=()=>{value--;if(value>0){label.textContent=value;label.style.animation='none';void label.offsetWidth;label.style.animation='';tone(420,.09);setTimeout(tick,650)}else{label.textContent='GO!';tone(760,.2,'triangle');setTimeout(()=>{layer.hidden=true;callback()},reducedMotion?100:430)}};
+  const tick=()=>{value--;if(value>0){label.textContent=value;label.style.animation='none';void label.offsetWidth;label.style.animation='';tone(420,.09);setTimeout(tick,650)}else{label.textContent='GO!';tone(760,.2,'triangle');setTimeout(()=>{layer.hidden=true;counting=false;callback()},reducedMotion?100:430)}};
   setTimeout(tick,reducedMotion?100:650);
 }
 
@@ -62,7 +65,7 @@ function snakeTick(){snakeDir=snakeNext;snakeTurnQueued=false;const head={x:snak
 function snakeDirection(name){if(!snakeRunning||snakeTurnQueued)return;const dirs={up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0},right:{x:1,y:0}};const next=dirs[name];if(next&&(next.x!==-snakeDir.x||next.y!==-snakeDir.y)){snakeNext=next;snakeTurnQueued=true}}
 $('snakeStart').addEventListener('click',()=>{clearInterval(snakeTimer);snakeRunning=false;countdown(snakeStart)});
 document.querySelectorAll('[data-snake]').forEach(button=>button.addEventListener('click',()=>snakeDirection(button.dataset.snake)));
-let snakeTouch=null;snakeCanvas.addEventListener('pointerdown',e=>{snakeTouch={x:e.clientX,y:e.clientY}});snakeCanvas.addEventListener('pointerup',e=>{if(!snakeTouch)return;const dx=e.clientX-snakeTouch.x,dy=e.clientY-snakeTouch.y;if(Math.max(Math.abs(dx),Math.abs(dy))>16)snakeDirection(Math.abs(dx)>Math.abs(dy)?dx>0?'right':'left':dy>0?'down':'up');snakeTouch=null});
+let snakeTouch=null;snakeCanvas.addEventListener('pointerdown',e=>{snakeTouch={x:e.clientX,y:e.clientY};snakeCanvas.setPointerCapture(e.pointerId)});snakeCanvas.addEventListener('pointerup',e=>{if(!snakeTouch)return;const dx=e.clientX-snakeTouch.x,dy=e.clientY-snakeTouch.y;if(Math.max(Math.abs(dx),Math.abs(dy))>16)snakeDirection(Math.abs(dx)>Math.abs(dy)?dx>0?'right':'left':dy>0?'down':'up');snakeTouch=null});
 
 // Memory: cards flip in 3D and each pair counts as one turn.
 const symbols=['★','◆','☀','♥','♫','⚡'];let memoryDeck=[],memoryOpen=[],memoryPairs=0,memoryTurns=0,memoryLocked=false,memoryTimer=null;
@@ -93,7 +96,7 @@ function drawTetris(){tctx.fillStyle='#10081f';tctx.fillRect(0,0,300,600);tctx.s
 function drawNext(){nctx.clearRect(0,0,120,100);if(!nextType)return;const m=shapes[nextType],size=24,ox=(120-m[0].length*size)/2,oy=(100-m.length*size)/2;nctx.save();nctx.translate(ox,oy);m.forEach((row,y)=>row.forEach((v,x)=>{if(v)block(nctx,x,y,size,colors[nextType])}));nctx.restore()}
 $('tetrisStart').addEventListener('click',()=>{if(tetrisRunning){clearInterval(tetrisTimer);tetrisRunning=false;$('tetrisStatus').textContent='Pause. Atme kurz durch.';$('tetrisStart').textContent='WEITERSPIELEN →'}else if(tetrisAlive)resumeTetris();else countdown(resetTetris)});
 document.querySelectorAll('[data-tetris]').forEach(button=>button.addEventListener('click',()=>tetrisAction(button.dataset.tetris)));
-let tetrisTouch=null;tc.addEventListener('pointerdown',e=>{tetrisTouch={x:e.clientX,y:e.clientY}});tc.addEventListener('pointerup',e=>{if(!tetrisTouch)return;const dx=e.clientX-tetrisTouch.x,dy=e.clientY-tetrisTouch.y;if(Math.abs(dx)<18&&Math.abs(dy)<18)tetrisAction('rotate');else if(Math.abs(dx)>Math.abs(dy)){const steps=Math.min(5,Math.max(1,Math.round(Math.abs(dx)/24)));for(let i=0;i<steps;i++)tetrisAction(dx>0?'right':'left')}else if(dy>90)tetrisAction('drop');else if(dy>18)tetrisAction('down');tetrisTouch=null});
+let tetrisTouch=null;tc.addEventListener('pointerdown',e=>{tetrisTouch={x:e.clientX,y:e.clientY};tc.setPointerCapture(e.pointerId)});tc.addEventListener('pointerup',e=>{if(!tetrisTouch)return;const dx=e.clientX-tetrisTouch.x,dy=e.clientY-tetrisTouch.y;if(Math.abs(dx)<18&&Math.abs(dy)<18)tetrisAction('rotate');else if(Math.abs(dx)>Math.abs(dy)){const steps=Math.min(5,Math.max(1,Math.round(Math.abs(dx)/24)));for(let i=0;i<steps;i++)tetrisAction(dx>0?'right':'left')}else if(dy>90)tetrisAction('drop');else if(dy>18)tetrisAction('down');tetrisTouch=null});
 document.addEventListener('keydown',e=>{if($('levelOverlay').hidden===false||$('countdown').hidden===false)return;if($('snakeScreen').classList.contains('active')){const map={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',a:'left',s:'down',d:'right'};if(map[e.key]){e.preventDefault();snakeDirection(map[e.key])}}else if($('tetrisScreen').classList.contains('active')){const map={ArrowUp:'rotate',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',' ':'drop',w:'rotate',a:'left',s:'down',d:'right'};if(map[e.key]){e.preventDefault();tetrisAction(map[e.key])}}});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)return;if(snakeRunning){clearInterval(snakeTimer);snakeRunning=false;$('snakeStatus').textContent='Pausiert – starte die Runde neu.'}if(tetrisRunning){clearInterval(tetrisTimer);tetrisRunning=false;$('tetrisStatus').textContent='Pausiert. Tippe auf Weiterspielen.';$('tetrisStart').textContent='WEITERSPIELEN →'}});
 
