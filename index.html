@@ -2,101 +2,54 @@
 <html lang="de-CH">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#190f31">
-  <title>Marina 28 · Die Jagd nach dem Geschenk</title>
-  <style>
-    :root{--bg:#140d29;--panel:#21153c;--line:#514373;--violet:#8d5bff;--lav:#c5a9ff;--yellow:#ffd45e;--ink:#fcfaff;--muted:#c4b9d9;--red:#ff796e;--green:#74e6bd}
-    *{box-sizing:border-box}html{background:var(--bg)}body{margin:0;color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at 50% -10%,#563097 0,transparent 45rem),var(--bg);min-height:100vh}
-    button,input{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
-    .shell{max-width:1080px;margin:auto;padding:clamp(16px,3vw,32px) clamp(16px,4vw,36px) 44px}
-    header{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:22px}.brand{font-weight:1000;letter-spacing:.07em;font-size:clamp(1.15rem,3vw,1.5rem)}.brand b{color:var(--yellow)}.pill{border:1px solid #8e70bf;background:#2c1d4c;border-radius:99px;padding:8px 13px;color:var(--lav);font-size:.78rem;white-space:nowrap}
-    .progress{height:9px;background:#392a5b;border-radius:20px;overflow:hidden;margin-bottom:23px}.progress>span{display:block;width:0;height:100%;background:linear-gradient(90deg,var(--violet),var(--yellow));border-radius:inherit;transition:width .4s}
-    .screen{display:none;animation:show .35s ease both}.screen.active{display:block}@keyframes show{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-    .card{border:1px solid var(--line);background:linear-gradient(145deg,#2b1d4b,#1b1332);border-radius:28px;box-shadow:0 25px 60px #09051b77;overflow:hidden}
-    .hero-img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}.hero-body,.game-body,.final-body{padding:clamp(21px,5vw,48px)}
-    .tag{display:inline-block;color:var(--yellow);font-size:.76rem;font-weight:900;text-transform:uppercase;letter-spacing:.19em;margin-bottom:14px}
-    h1,h2,h3,p{margin-top:0}h1{font-size:clamp(2.6rem,8vw,5.7rem);line-height:.98;letter-spacing:-.055em;margin-bottom:20px}h2{font-size:clamp(2rem,5vw,3.7rem);line-height:1.05;letter-spacing:-.045em;margin-bottom:16px}h3{font-size:1.08rem}p{line-height:1.55;color:var(--muted)}strong{color:white}
-    .intro-grid{display:grid;grid-template-columns:1fr auto;align-items:end;gap:20px}.intro-grid p{max-width:650px}.badge{width:100px;height:100px;display:grid;place-items:center;border:4px solid var(--yellow);border-radius:50%;font-size:2.8rem;font-weight:1000;color:var(--yellow);transform:rotate(12deg)}
-    .btn{display:inline-flex;justify-content:center;align-items:center;gap:10px;min-height:52px;padding:12px 22px;border:0;border-radius:16px;background:var(--yellow);color:#25142b;font-weight:900;text-decoration:none;box-shadow:0 7px 0 #b3862f;transition:transform .16s,box-shadow .16s}.btn:hover{transform:translateY(-2px)}.btn:active{transform:translateY(5px);box-shadow:0 2px 0 #b3862f}.btn.alt{background:#7147cc;color:white;box-shadow:0 7px 0 #3e2b71}.btn.alt:active{box-shadow:0 2px 0 #3e2b71}.btn.small{min-height:42px;padding:8px 14px;font-size:.86rem}.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-    .game-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}.number{font-weight:1000;font-size:clamp(3rem,8vw,5.8rem);color:#7354ab;line-height:1}.game-body>p{max-width:720px}.game-panel{background:#130e29;border:1px solid #4d3b74;border-radius:22px;padding:clamp(15px,3vw,28px);margin:24px 0}.status{min-height:30px;font-weight:750;color:var(--lav);margin:12px 0}.status.good{color:var(--green)}.status.bad{color:var(--red)}.game-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-    .snake-layout{display:grid;grid-template-columns:minmax(0,440px) minmax(160px,1fr);gap:24px;align-items:center}.snake-board{position:relative;width:100%;aspect-ratio:1;background:#24183f;border:3px solid #8d6dd3;border-radius:10px;overflow:hidden;touch-action:none}.snake-board canvas{display:block;width:100%;height:100%}.score{color:var(--yellow);font-size:1.4rem;font-weight:900}.controls{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(2,58px);gap:7px;justify-content:center;margin:20px auto 0}.control{border:2px solid #9173c5;border-radius:14px;background:#3d2a68;color:white;font-size:1.5rem;font-weight:900;touch-action:manipulation}.control:active{background:var(--violet)}.control.up{grid-column:2}.control.left{grid-column:1;grid-row:2}.control.down{grid-column:2;grid-row:2}.control.right{grid-column:3;grid-row:2}
-    .memory-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;max-width:620px;margin:auto}.memory-card{aspect-ratio:1.25;border:2px solid #8164c0;border-radius:16px;background:linear-gradient(145deg,#533486,#31204f);color:var(--yellow);font-size:clamp(1.5rem,5vw,2.7rem);font-weight:1000;transition:transform .2s,background .2s;transform-style:preserve-3d}.memory-card.open,.memory-card.matched{background:#eee6ff;color:#2a1d49;transform:rotateY(8deg)}.memory-card.matched{border-color:var(--green);opacity:.85}.memory-card:disabled{cursor:default}.memory-stats{display:flex;justify-content:space-between;gap:12px;color:var(--lav);font-weight:850;margin-bottom:16px}
-    .clues{display:grid;gap:10px;max-width:600px}.clue{display:grid;grid-template-columns:75px 1fr;gap:15px;padding:14px 16px;border:1px solid #6e59a2;border-radius:12px;background:#271a44;align-items:center}.clue code{color:var(--yellow);font-size:1.45rem;font-weight:900;letter-spacing:.15em}.clue span{color:#e9e1f7;font-size:.91rem}.code-entry{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:25px}.code-entry input{width:148px;padding:13px 15px;border:2px solid #8c70c1;border-radius:13px;background:#100b22;color:#fff;font-size:1.6rem;font-weight:900;letter-spacing:.35em;text-align:center}.code-entry input::placeholder{color:#6e608b}.attempts{color:var(--lav);font-size:.9rem;margin-top:12px}
-    .final{text-align:center}.final .spark{font-size:4rem;margin:6px auto 18px}.final h1{color:var(--yellow)}.final p{font-size:clamp(1rem,2vw,1.18rem);max-width:620px;margin:0 auto 27px}.final-img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}.fine{font-size:.8rem;margin-top:24px}.confetti{position:fixed;z-index:10;pointer-events:none;top:-30px;width:10px;height:17px;animation:fall var(--time) linear forwards}@keyframes fall{to{transform:translate(var(--drift),110vh) rotate(800deg);opacity:.1}}
-    footer{text-align:center;color:#a99ac9;font-size:.76rem;padding-top:25px}
-    @media(max-width:700px){.snake-layout{grid-template-columns:1fr}.snake-board{max-width:440px;margin:auto}.snake-side{text-align:center}.badge{display:none}.game-head{align-items:center}.memory-grid{gap:7px}.memory-card{border-radius:10px;aspect-ratio:1}.clue{grid-template-columns:60px 1fr;gap:10px;padding:12px}.clue code{font-size:1.15rem}}
-    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition:none!important}}
-  </style>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#130a28">
+  <meta name="description" content="Marinas Geburtstagsrennen: drei Herausforderungen bis zum Geschenk.">
+  <title>Marina 28 · Das Geburtstagsrennen</title>
+  <link rel="preload" as="image" href="assets/marina-race.webp">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
 </head>
 <body>
-<div class="shell">
-  <header><div class="brand">MARINA <b>28</b> ⚡</div><div class="pill" id="stagePill">Geschenk-Mission</div></header>
-  <div class="progress" role="progressbar" aria-label="Fortschritt" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0" id="progress"><span id="progressFill"></span></div>
-  <main>
-    <section class="screen active card" id="intro">
-      <img class="hero-img" src="assets/marina-race.webp" alt="Marina fährt der 30 auf einem violetten Kart davon; in der Uhr ist ein Handy-Symbol.">
-      <div class="hero-body"><span class="tag">Operation: 28 bleibt vorne</span><div class="intro-grid"><div><h1>Hey Marina,<br>bereit für die Jagd?</h1><p>Die 30 ist dir schon auf den Fersen. Zwischen dir und deinem Geschenk liegen <strong>drei Herausforderungen</strong>. Schaffst du alle, gehört die Ziellinie dir.</p></div><div class="badge">28</div></div><button class="btn" id="startBtn">Los geht's →</button></div>
-    </section>
-    <section class="screen card" id="snakeScreen">
-      <div class="game-body"><div class="game-head"><div><span class="tag">Herausforderung 01 / 03</span><h2>Snake-Sprint</h2></div><div class="number">01</div></div><p>Sammle <strong>8 goldene Sterne</strong>, ohne die Wand oder dich selbst zu berühren. Mit Pfeiltasten, Wischen auf dem Spielfeld oder den Knöpfen steuern.</p><div class="game-panel"><div class="snake-layout"><div class="snake-board" id="snakeBoard"><canvas id="snakeCanvas" width="400" height="400" aria-label="Snake-Spielfeld"></canvas></div><div class="snake-side"><div class="score" id="snakeScore">Sterne: 0 / 8</div><div class="status" id="snakeStatus" role="status">Drück auf Start.</div><div class="game-actions"><button class="btn small" id="snakeStart">Snake starten</button></div><div class="controls" aria-label="Snake steuern"><button class="control up" data-dir="up" aria-label="Hoch">↑</button><button class="control left" data-dir="left" aria-label="Links">←</button><button class="control down" data-dir="down" aria-label="Runter">↓</button><button class="control right" data-dir="right" aria-label="Rechts">→</button></div></div></div></div></div>
-    </section>
-    <section class="screen card" id="memoryScreen">
-      <div class="game-body"><div class="game-head"><div><span class="tag">Herausforderung 02 / 03</span><h2>Memory-Boxenstopp</h2></div><div class="number">02</div></div><p>Finde die <strong>6 Paare</strong>. Du hast höchstens <strong>15 Versuche</strong>. Danach werden die Karten neu gemischt.</p><div class="game-panel"><div class="memory-stats"><span id="pairs">Paare: 0 / 6</span><span id="turns">Versuche: 0 / 15</span></div><div class="memory-grid" id="memoryGrid"></div><div class="status" id="memoryStatus" role="status">Zwei Karten aufdecken.</div></div><button class="btn alt small" id="memoryRestart">Neu mischen</button></div>
-    </section>
-    <section class="screen card" id="codeScreen">
-      <div class="game-body"><div class="game-head"><div><span class="tag">Herausforderung 03 / 03</span><h2>Codeknacker</h2></div><div class="number">03</div></div><p>Der letzte Tresor braucht einen <strong>dreistelligen Code</strong>. Jede Zeile verrät exakt, wie viele Ziffern stimmen und ob sie am richtigen Platz stehen. Keine Ziffer kommt doppelt vor.</p><div class="game-panel"><div class="clues"><div class="clue"><code>682</code><span>Eine Ziffer richtig und am richtigen Platz.</span></div><div class="clue"><code>614</code><span>Eine Ziffer richtig, aber am falschen Platz.</span></div><div class="clue"><code>206</code><span>Zwei Ziffern richtig, beide am falschen Platz.</span></div><div class="clue"><code>738</code><span>Keine Ziffer ist richtig.</span></div><div class="clue"><code>780</code><span>Eine Ziffer richtig, aber am falschen Platz.</span></div></div><form class="code-entry" id="codeForm"><label for="codeInput">Dein Code:</label><input id="codeInput" type="text" inputmode="numeric" pattern="[0-9]{3}" maxlength="3" placeholder="···" autocomplete="off" required aria-label="Dreistelliger Code"><button class="btn small" type="submit">Entriegeln</button></form><div class="attempts" id="attempts">Versuche: 0</div><div class="status" id="codeStatus" role="status">Du schaffst das.</div></div></div>
-    </section>
-    <section class="screen card final" id="finalScreen">
-      <img class="final-img" src="assets/marina-race.webp" alt="Marina gewinnt das Rennen gegen die 30.">
-      <div class="final-body"><div class="spark" aria-hidden="true">🏆</div><span class="tag">Alle 3 Herausforderungen geschafft</span><h1>Alles Gute<br>zum 28., Marina!</h1><p>Du hast die 30 abgehängt und dir dein Geschenk verdient. Wir wünschen dir einen wunderschönen Geburtstag, ganz viel Freude und ein Jahr voller guter Überraschungen. 💜<br><br><strong>Von Luca &amp; Gessi</strong></p><a class="btn" href="gutschein.pdf" target="_blank" rel="noopener">Gutschein öffnen ↗</a><p class="fine">Dein Gutschein öffnet sich als PDF.</p></div>
-    </section>
-  </main>
-  <footer>Made with 💜 for Marina · Luca &amp; Gessi</footer>
-</div>
-<script>
-  'use strict';
-  const $=id=>document.getElementById(id);
-  const screens=['intro','snakeScreen','memoryScreen','codeScreen','finalScreen'];
-  const key='marina-28-progress-v1';
-  let stage=Math.min(3,Math.max(0,Number(localStorage.getItem(key))||0));
-  let snakeTimer=null, snake=[],direction={x:1,y:0},queued={x:1,y:0},food=null,score=0,running=false;
-  let memoryDeck=[],openCards=[],matched=0,turns=0,memoryLocked=false,memoryTimeout=null;
-  let attempts=0;
-  const canvas=$('snakeCanvas'),ctx=canvas.getContext('2d'),grid=16,cell=25;
-  const palette=['#8d5bff','#ffd45e','#74e6bd','#ff9e5b'];
-
-  function show(id){
-    clearInterval(snakeTimer);snakeTimer=null;running=false;
-    screens.forEach(name=>$(name).classList.toggle('active',name===id));
-    $('stagePill').textContent=id==='finalScreen'?'Mission geschafft':id==='intro'?'Geschenk-Mission':`Level ${Math.min(stage+1,3)} / 3`;
-    $('progressFill').style.width=`${stage/3*100}%`;
-    $('progress').setAttribute('aria-valuenow',String(stage));
-    window.scrollTo({top:0,behavior:'smooth'});
-  }
-  function save(next){stage=next;localStorage.setItem(key,String(stage));show(next===3?'finalScreen':next===1?'memoryScreen':'codeScreen');if(next===1)initMemory();if(next===3)celebrate();}
-  $('startBtn').addEventListener('click',()=>{if(stage===3){show('finalScreen');return}if(stage===1){show('memoryScreen');initMemory()}else if(stage===2){show('codeScreen')}else{show('snakeScreen');drawSnake()}});
-
-  function placeFood(){const empty=[];for(let y=0;y<grid;y++)for(let x=0;x<grid;x++)if(!snake.some(part=>part.x===x&&part.y===y))empty.push({x,y});food=empty[Math.floor(Math.random()*empty.length)]}
-  function drawSnake(){ctx.fillStyle='#24183f';ctx.fillRect(0,0,400,400);ctx.strokeStyle='#34244f';ctx.lineWidth=1;for(let i=1;i<grid;i++){ctx.beginPath();ctx.moveTo(i*cell,0);ctx.lineTo(i*cell,400);ctx.moveTo(0,i*cell);ctx.lineTo(400,i*cell);ctx.stroke()}if(food){ctx.fillStyle='#ffd45e';ctx.font='25px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('★',(food.x+.5)*cell,(food.y+.52)*cell)}snake.forEach((part,i)=>{ctx.fillStyle=i?'#9b75f4':'#74e6bd';ctx.beginPath();ctx.roundRect(part.x*cell+2,part.y*cell+2,cell-4,cell-4,6);ctx.fill();if(i===0){ctx.fillStyle='#23163a';ctx.fillRect(part.x*cell+15,part.y*cell+7,3,3)}})}
-  function resetSnake(){clearInterval(snakeTimer);snake=[{x:5,y:8},{x:4,y:8},{x:3,y:8}];direction={x:1,y:0};queued={...direction};score=0;running=true;placeFood();$('snakeScore').textContent='Sterne: 0 / 8';$('snakeStatus').textContent='Los!';$('snakeStatus').className='status';$('snakeStart').textContent='Neu starten';drawSnake();snakeTimer=setInterval(tick,150)}
-  function tick(){direction=queued;const head={x:snake[0].x+direction.x,y:snake[0].y+direction.y};const eats=food&&head.x===food.x&&head.y===food.y;const body=eats?snake:snake.slice(0,-1);if(head.x<0||head.x>=grid||head.y<0||head.y>=grid||body.some(p=>p.x===head.x&&p.y===head.y)){clearInterval(snakeTimer);running=false;$('snakeStatus').textContent='Autsch! Versuch es nochmal.';$('snakeStatus').className='status bad';return}snake.unshift(head);if(eats){score++;$('snakeScore').textContent=`Sterne: ${score} / 8`;if(score>=8){drawSnake();clearInterval(snakeTimer);running=false;$('snakeStatus').textContent='Geschafft!';$('snakeStatus').className='status good';setTimeout(()=>save(1),600);return}placeFood();clearInterval(snakeTimer);snakeTimer=setInterval(tick,Math.max(95,150-score*5))}else snake.pop();drawSnake()}
-  function setDirection(name){if(!running)return;const dirs={up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0},right:{x:1,y:0}};const next=dirs[name];if(next&&!(next.x===-direction.x&&next.y===-direction.y))queued=next}
-  $('snakeStart').addEventListener('click',resetSnake);document.querySelectorAll('[data-dir]').forEach(b=>b.addEventListener('click',()=>setDirection(b.dataset.dir)));
-  document.addEventListener('keydown',event=>{if(!$('snakeScreen').classList.contains('active'))return;const map={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right'};if(map[event.key]){event.preventDefault();setDirection(map[event.key])}});
-  let touchStart=null;$('snakeBoard').addEventListener('touchstart',e=>{touchStart={x:e.touches[0].clientX,y:e.touches[0].clientY}},{passive:true});$('snakeBoard').addEventListener('touchend',e=>{if(!touchStart)return;const dx=e.changedTouches[0].clientX-touchStart.x,dy=e.changedTouches[0].clientY-touchStart.y;if(Math.max(Math.abs(dx),Math.abs(dy))>20)setDirection(Math.abs(dx)>Math.abs(dy)?dx>0?'right':'left':dy>0?'down':'up');touchStart=null},{passive:true});
-
-  const symbols=['★','◆','☀','♥','♬','⚡'];
-  function shuffle(items){for(let i=items.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[items[i],items[j]]=[items[j],items[i]]}return items}
-  function initMemory(){clearTimeout(memoryTimeout);memoryDeck=shuffle([...symbols,...symbols].map((symbol,i)=>({symbol,id:i})));openCards=[];matched=0;turns=0;memoryLocked=false;$('pairs').textContent='Paare: 0 / 6';$('turns').textContent='Versuche: 0 / 15';$('memoryStatus').textContent='Zwei Karten aufdecken.';$('memoryStatus').className='status';$('memoryGrid').innerHTML='';memoryDeck.forEach((card,index)=>{const button=document.createElement('button');button.type='button';button.className='memory-card';button.textContent='?';button.setAttribute('aria-label',`Karte ${index+1}, verdeckt`);button.addEventListener('click',()=>flip(index));$('memoryGrid').appendChild(button)})}
-  function flip(index){if(memoryLocked||openCards.includes(index))return;const button=$('memoryGrid').children[index];if(button.classList.contains('matched'))return;button.textContent=memoryDeck[index].symbol;button.classList.add('open');button.setAttribute('aria-label',`Karte ${index+1}, ${memoryDeck[index].symbol}`);openCards.push(index);if(openCards.length!==2)return;turns++;$('turns').textContent=`Versuche: ${turns} / 15`;const [a,b]=openCards;if(memoryDeck[a].symbol===memoryDeck[b].symbol){for(const i of openCards){const card=$('memoryGrid').children[i];card.classList.add('matched');card.disabled=true}matched++;$('pairs').textContent=`Paare: ${matched} / 6`;openCards=[];if(matched===6){$('memoryStatus').textContent='Alle Paare gefunden!';$('memoryStatus').className='status good';memoryLocked=true;setTimeout(()=>save(2),650)}else if(turns>=15)memoryFail()}else{memoryLocked=true;memoryTimeout=setTimeout(()=>{for(const i of openCards){const card=$('memoryGrid').children[i];card.textContent='?';card.classList.remove('open');card.setAttribute('aria-label',`Karte ${i+1}, verdeckt`)}openCards=[];memoryLocked=false;if(turns>=15)memoryFail()},850)}}
-  function memoryFail(){memoryLocked=true;$('memoryStatus').textContent='15 Versuche verbraucht. Misch neu und probier es nochmal.';$('memoryStatus').className='status bad'}
-  $('memoryRestart').addEventListener('click',initMemory);
-
-  $('codeForm').addEventListener('submit',event=>{event.preventDefault();const value=$('codeInput').value.trim();if(!/^\d{3}$/.test(value))return;attempts++;$('attempts').textContent=`Versuche: ${attempts}`;if(value==='042'){$('codeStatus').textContent='Tresor entriegelt!';$('codeStatus').className='status good';$('codeInput').disabled=true;$('codeForm').querySelector('button').disabled=true;setTimeout(()=>save(3),650)}else{$('codeStatus').textContent='Noch nicht. Lies die Hinweise genau und versuch es erneut.';$('codeStatus').className='status bad';$('codeInput').select()}});
-  function celebrate(){for(let i=0;i<70;i++){const bit=document.createElement('i');bit.className='confetti';bit.style.left=`${Math.random()*100}vw`;bit.style.background=palette[i%palette.length];bit.style.setProperty('--time',`${2+Math.random()*2}s`);bit.style.setProperty('--drift',`${(Math.random()-.5)*230}px`);bit.style.animationDelay=`${Math.random()*.7}s`;document.body.appendChild(bit);setTimeout(()=>bit.remove(),5000)}}
-  if(stage===3){$('startBtn').textContent='Zum Geschenk →'}
-  drawSnake();
-</script>
+  <div class="ambient" aria-hidden="true"><div class="ambient-grid"></div><div class="orb orb-a"></div><div class="orb orb-b"></div><div class="speed-lines"></div></div>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand"><span class="brand-icon">M<span>★</span></span><span>MARINA<span class="brand-year">/28</span><small>THE BIRTHDAY RACE</small></span></div>
+      <button class="sound-btn" id="soundBtn" type="button" aria-label="Ton einschalten" aria-pressed="false"><span class="sound-icon">♫</span><span id="soundText">TON AUS</span></button>
+    </header>
+    <nav class="race-track" aria-label="Dein Fortschritt">
+      <div class="race-track-line"><div class="race-track-fill" id="trackFill"></div><div class="tiny-kart" id="trackKart" aria-hidden="true">🏎️</div></div>
+      <div class="race-stops"><span class="stop current" data-stop="0"><i>★</i>START</span><span class="stop" data-stop="1"><i>01</i>SNAKE</span><span class="stop" data-stop="2"><i>02</i>MEMORY</span><span class="stop" data-stop="3"><i>03</i>TETRIS</span><span class="stop" data-stop="4"><i>🎁</i>GESCHENK</span></div>
+    </nav>
+    <main>
+      <section class="screen active" id="intro" aria-labelledby="introTitle">
+        <div class="hero-card">
+          <div class="hero-art"><img src="assets/marina-race.webp" alt="Marina im violetten Kart fährt der 30 auf einem Dreirad davon."><span class="hero-sticker sticker-one">LEVEL 28<br>UNLOCKED</span><span class="hero-sticker sticker-two">30? <b>ZU LANGSAM!</b></span><span class="hero-checkers" aria-hidden="true"></span></div>
+          <div class="hero-content"><div class="micro">// EINE MISSION NUR FÜR DICH</div><h1 id="introTitle">HEY<br><em>MARINA!</em><span class="title-star">✳</span></h1><p class="hero-lead">Die 30 jagt dich. Dein Geschenk wartet im Ziel. Dazwischen liegen <strong>drei Spiele</strong> – und du sitzt am Steuer.</p><div class="challenge-chips"><span>🐍 SNAKE</span><span>✦ MEMORY</span><span>▦ TETRIS</span></div><button class="action primary" id="startBtn" type="button"><span>RENNEN STARTEN</span><b>↗</b></button><p class="tiny-note">Pausen sind erlaubt. Dein Fortschritt bleibt auf diesem Gerät gespeichert.</p></div>
+        </div>
+      </section>
+      <section class="screen game-screen" id="snakeScreen" aria-labelledby="snakeTitle">
+        <div class="game-heading"><div><div class="micro">// RUNDE 01 — REAKTION</div><h2 id="snakeTitle">SNAKE<br><em>SPRINT.</em></h2><p>Sammle <strong>8 goldene Sterne</strong>. Berührst du die Wand oder dich selbst, startest du diese Runde neu.</p></div><div class="level-stamp">01<span>/03</span></div></div>
+        <div class="game-card snake-layout"><div class="board-frame"><div class="board-label"><span>★ STERNE</span><b id="snakeScore">0 / 8</b></div><canvas id="snakeCanvas" width="400" height="400" aria-label="Snake-Spielfeld"></canvas><div class="board-caption">SWIPE ODER NUTZE DIE PFEILE</div></div><div class="game-side"><div class="side-icon">🐍</div><h3>Schlängel dich nach vorn.</h3><p>Steuere mit den Pfeiltasten oder wische direkt auf dem Feld. Auf dem Handy gehen auch die Knöpfe.</p><div class="status" id="snakeStatus" role="status">Bereit für den Start?</div><button class="action secondary" id="snakeStart" type="button">SPIEL STARTEN <span>→</span></button><div class="dpad" aria-label="Snake-Steuerung"><button type="button" data-snake="up" aria-label="Hoch">↑</button><button type="button" data-snake="left" aria-label="Links">←</button><button type="button" data-snake="down" aria-label="Runter">↓</button><button type="button" data-snake="right" aria-label="Rechts">→</button></div></div></div>
+      </section>
+      <section class="screen game-screen" id="memoryScreen" aria-labelledby="memoryTitle">
+        <div class="game-heading"><div><div class="micro">// RUNDE 02 — KÖPFCHEN</div><h2 id="memoryTitle">MEMORY<br><em>BOXENSTOPP.</em></h2><p>Finde <strong>6 Paare</strong> in höchstens <strong>15 Versuchen</strong>. Zwei Karten pro Versuch.</p></div><div class="level-stamp">02<span>/03</span></div></div>
+        <div class="game-card"><div class="memory-head"><span id="memoryPairs">0 / 6 PAARE</span><span id="memoryTurns">0 / 15 VERSUCHE</span></div><div class="memory-grid" id="memoryGrid" aria-label="Memory-Spiel mit zwölf Karten"></div><div class="memory-foot"><div class="status" id="memoryStatus" role="status">Dreh zwei Karten um.</div><button class="text-button" id="memoryRestart" type="button">↻ NEU MISCHEN</button></div></div>
+      </section>
+      <section class="screen game-screen" id="tetrisScreen" aria-labelledby="tetrisTitle">
+        <div class="game-heading"><div><div class="micro">// RUNDE 03 — ENDSPURT</div><h2 id="tetrisTitle">TETRIS<br><em>FINALE.</em></h2><p>Räume <strong>6 Reihen</strong> ab, um das Geschenk freizuschalten. Pfeiltasten oder die Knöpfe bewegen die Blöcke.</p></div><div class="level-stamp">03<span>/03</span></div></div>
+        <div class="game-card tetris-card"><div class="tetris-layout"><div class="tetris-board-wrap"><div class="tetris-banner"><span>MARINA ARCADE</span><span class="live-dot">LIVE</span></div><canvas id="tetrisCanvas" width="300" height="600" aria-label="Tetris-Spielfeld"></canvas><div class="tetris-board-foot">▦ &nbsp; LINE UP. CLEAR OUT. WIN BIG.</div></div><div class="tetris-side"><div class="metric"><small>REIHEN</small><strong id="tetrisLines">0 <span>/ 6</span></strong><div class="meter"><i id="tetrisMeter"></i></div></div><div class="metric"><small>PUNKTE</small><strong id="tetrisScore">0000</strong></div><div class="next-box"><small>NÄCHSTER BLOCK</small><canvas id="nextCanvas" width="120" height="100" aria-label="Nächster Tetris-Block"></canvas></div><div class="status" id="tetrisStatus" role="status">Bereit für den Endspurt?</div><button class="action secondary" id="tetrisStart" type="button">SPIEL STARTEN <span>→</span></button><p class="tetris-help">← → bewegen · ↑ drehen<br>↓ schneller · Leertaste fallen</p></div></div><div class="tetris-controls" aria-label="Tetris-Steuerung"><button type="button" data-tetris="left" aria-label="Nach links">←<small>LINKS</small></button><button type="button" data-tetris="rotate" aria-label="Drehen">↻<small>DREHEN</small></button><button type="button" data-tetris="right" aria-label="Nach rechts">→<small>RECHTS</small></button><button type="button" data-tetris="down" aria-label="Schneller nach unten">↓<small>RUNTER</small></button><button class="drop-btn" type="button" data-tetris="drop" aria-label="Sofort fallen lassen">⇣<small>FALLEN</small></button></div></div>
+      </section>
+      <section class="screen finale" id="finalScreen" aria-labelledby="finalTitle">
+        <div class="final-glow" aria-hidden="true"></div><div class="micro">// ZIELLINIE ÜBERQUERT</div><div class="final-trophy" aria-hidden="true">✦</div><h2 id="finalTitle">ALLES GUTE<br><em>ZUM 28., MARINA!</em></h2><p>Du hast die 30 abgehängt. Wir wünschen dir ein Jahr voller schöner Momente, verrückter Ideen und ganz viel Lachen. Das hier ist für dich. 💜</p><div class="signature">Von <strong>Luca &amp; Gessi</strong></div>
+        <div class="gift-scene" id="giftScene"><div class="gift-rays" aria-hidden="true"></div><div class="envelope" id="envelope" aria-hidden="true"><div class="envelope-back"></div><div class="letter"><div class="letter-star">✳</div><b>FÜR MARINA</b><span>Ein kleines Geschenk<br>für einen grossen Tag.</span></div><div class="envelope-front"></div><div class="envelope-flap"></div><div class="wax-seal">M</div></div></div>
+        <button class="action primary gift-open" id="giftOpen" type="button"><span>GESCHENK ÖFFNEN</span><b>✦</b></button><a class="action voucher-link" id="voucherLink" href="gutschein.pdf" target="_blank" rel="noopener" hidden><span>GUTSCHEIN ANSEHEN</span><b>↗</b></a><p class="gift-note" id="giftNote">Klick auf den Umschlag oder den Knopf. ✨</p>
+      </section>
+    </main>
+    <footer><span>MADE WITH 💜 BY LUCA &amp; GESSI</span><span>EST. LEVEL 28 · 2026</span></footer>
+  </div>
+  <div class="level-overlay" id="levelOverlay" role="dialog" aria-modal="true" aria-labelledby="levelTitle" hidden><div class="level-panel"><div class="level-burst" aria-hidden="true">✳</div><div class="micro">// CHECKPOINT ERREICHT</div><h2 id="levelTitle">STARK GEMACHT!</h2><p id="levelText"></p><button class="action primary" id="nextStage" type="button"><span>WEITER ZUM NÄCHSTEN</span><b>→</b></button></div></div>
+  <div class="countdown" id="countdown" aria-live="assertive" hidden><span id="countdownValue">3</span></div>
+  <div class="particle-layer" id="particles" aria-hidden="true"></div>
 </body>
 </html>
