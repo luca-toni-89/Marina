@@ -11,7 +11,52 @@ function tone(freq=440,duration=.12,type='sine',gain=.045){
   try{audioContext??=new (window.AudioContext||window.webkitAudioContext)();const osc=audioContext.createOscillator(),volume=audioContext.createGain();osc.type=type;osc.frequency.setValueAtTime(freq,audioContext.currentTime);volume.gain.setValueAtTime(gain,audioContext.currentTime);volume.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+duration);osc.connect(volume);volume.connect(audioContext.destination);osc.start();osc.stop(audioContext.currentTime+duration)}catch{}
 }
 function fanfare(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>tone(f,.25,'triangle',.07),i*115))}
-$('soundBtn').addEventListener('click',()=>{soundOn=!soundOn;$('soundBtn').setAttribute('aria-pressed',String(soundOn));$('soundBtn').setAttribute('aria-label',soundOn?'Ton ausschalten':'Ton einschalten');$('soundText').textContent=soundOn?'TON AN':'TON AUS';tone(880,.1)});
+// Original, quiet 8-bit loop. Audio starts only after a tap and sleeps in background tabs.
+const musicBars=[
+  [67,0,71,74,0,71,69,0,67,0,64,67,69,0,74,0],
+  [76,0,74,71,0,69,67,0,69,0,71,74,72,0,69,0],
+  [71,0,74,79,0,78,76,0,74,0,71,67,69,0,71,0],
+  [72,0,76,74,0,71,69,0,67,0,69,66,67,0,0,0]
+];
+let musicTimer=null,musicBus=null,musicStep=0,musicNext=0;
+function musicVoice(note,when,length,volume,type='square'){
+  if(!musicBus||!note)return;
+  const osc=audioContext.createOscillator(),env=audioContext.createGain();
+  osc.type=type;osc.frequency.setValueAtTime(440*2**((note-69)/12),when);
+  env.gain.setValueAtTime(.0001,when);env.gain.linearRampToValueAtTime(volume,when+.012);
+  env.gain.exponentialRampToValueAtTime(.0001,when+length);
+  osc.connect(env);env.connect(musicBus);osc.start(when);osc.stop(when+length+.015);
+}
+function scheduleMusic(){
+  if(!soundOn||document.hidden||!musicBus)return;
+  const beat=60/116/4;
+  while(musicNext<audioContext.currentTime+.22){
+    const index=musicStep%64,step=index%16,bar=Math.floor(index/16),when=musicNext;
+    musicVoice(musicBars[bar][step],when,step%4===0?beat*1.7:beat*.8,.028);
+    if(step===0||step===8)musicVoice([43,40,48,50][bar],when,beat*3.2,.025,'triangle');
+    if(step===6||step===14)musicVoice([50,47,55,57][bar],when,beat*.8,.012,'triangle');
+    if(step%4===2)musicVoice(91,when,beat*.12,.004,'triangle');
+    musicStep++;musicNext+=beat;
+  }
+}
+function stopMusic(){clearInterval(musicTimer);musicTimer=null;if(musicBus){musicBus.gain.setTargetAtTime(0,audioContext.currentTime,.018);musicBus=null}}
+function startMusic(){
+  if(!soundOn||document.hidden||musicTimer)return;
+  try{
+    audioContext??=new (window.AudioContext||window.webkitAudioContext)();
+    audioContext.resume().then(()=>{
+      if(!soundOn||document.hidden||musicTimer)return;
+      musicBus=audioContext.createGain();musicBus.gain.value=.55;musicBus.connect(audioContext.destination);
+      musicStep=0;musicNext=audioContext.currentTime+.04;scheduleMusic();musicTimer=setInterval(scheduleMusic,70);
+    }).catch(()=>{});
+  }catch{}
+}
+$('soundBtn').addEventListener('click',()=>{
+  soundOn=!soundOn;$('soundBtn').setAttribute('aria-pressed',String(soundOn));
+  $('soundBtn').setAttribute('aria-label',soundOn?'Ton ausschalten':'Ton einschalten');
+  $('soundText').textContent=soundOn?'TON AN':'TON AUS';
+  if(soundOn){tone(880,.1);startMusic()}else stopMusic();
+});
 
 function updateTrack(index){const percent=index*25;$('trackFill').style.width=`${percent}%`;$('trackKart').style.left=`${percent}%`;document.querySelectorAll('.stop').forEach((node,i)=>{node.classList.toggle('done',i<index);node.classList.toggle('current',i===index)})}
 function showScreen(id){
@@ -133,7 +178,8 @@ $('tetrisStart').addEventListener('click',()=>{if(tetrisRunning){clearInterval(t
 document.querySelectorAll('[data-tetris]').forEach(button=>button.addEventListener('click',()=>tetrisAction(button.dataset.tetris)));
 let tetrisTouch=null;tc.addEventListener('pointerdown',e=>{tetrisTouch={x:e.clientX,y:e.clientY};tc.setPointerCapture(e.pointerId)});tc.addEventListener('pointerup',e=>{if(!tetrisTouch)return;const dx=e.clientX-tetrisTouch.x,dy=e.clientY-tetrisTouch.y;if(Math.abs(dx)<18&&Math.abs(dy)<18)tetrisAction('rotate');else if(Math.abs(dx)>Math.abs(dy)){const steps=Math.min(5,Math.max(1,Math.round(Math.abs(dx)/24)));for(let i=0;i<steps;i++)tetrisAction(dx>0?'right':'left')}else if(dy>90)tetrisAction('drop');else if(dy>18)tetrisAction('down');tetrisTouch=null});
 document.addEventListener('keydown',e=>{if($('levelOverlay').hidden===false||$('countdown').hidden===false)return;if($('snakeScreen').classList.contains('active')){const map={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',a:'left',s:'down',d:'right'};if(map[e.key]){e.preventDefault();snakeDirection(map[e.key])}}else if($('tetrisScreen').classList.contains('active')){const map={ArrowUp:'rotate',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',' ':'drop',w:'rotate',a:'left',s:'down',d:'right'};if(map[e.key]){e.preventDefault();tetrisAction(map[e.key])}}});
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)return;if(snakeRunning){clearInterval(snakeTimer);snakeRunning=false;$('snakeStatus').textContent='Pausiert – starte die Runde neu.'}if(tetrisRunning){clearInterval(tetrisTimer);tetrisRunning=false;$('tetrisStatus').textContent='Pausiert. Tippe auf Weiterspielen.';$('tetrisStart').textContent='WEITERSPIELEN →'}});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){startMusic();return}stopMusic();if(snakeRunning){clearInterval(snakeTimer);snakeRunning=false;$('snakeStatus').textContent='Pausiert – starte die Runde neu.'}if(tetrisRunning){clearInterval(tetrisTimer);tetrisRunning=false;$('tetrisStatus').textContent='Pausiert. Tippe auf Weiterspielen.';$('tetrisStart').textContent='WEITERSPIELEN →'}});
+window.addEventListener('pagehide',stopMusic);
 
 // The envelope opens before the PDF link appears. The PDF remains a normal relative file.
 function openGift(){if($('giftScene').classList.contains('open'))return;$('giftScene').classList.add('open');$('giftOpen').disabled=true;$('giftNote').textContent='Nur für dich, Marina. 💜';tone(523,.24,'triangle');setTimeout(()=>tone(659,.24,'triangle'),230);setTimeout(()=>{confetti(115,{x:window.innerWidth/2,y:window.innerHeight*.55});fanfare()},650);setTimeout(()=>{$('giftOpen').hidden=true;$('voucherLink').hidden=false;$('voucherLink').focus()},reducedMotion?850:2200)}
