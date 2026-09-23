@@ -5,7 +5,7 @@ Statische Geburtstagsseite für GitHub Pages. `index.html`, `style.css`, `app.js
 ## Ablauf
 
 1. Snake: 8 Sterne sammeln.
-2. Memory: 6 Paare in 15 Versuchen finden.
+2. Memory: 8 Paare finden; Züge werden gezählt.
 3. Tetris: 6 Reihen räumen.
 4. Geschenkumschlag öffnen und `gutschein.pdf` ansehen.
 

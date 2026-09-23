@@ -67,12 +67,47 @@ $('snakeStart').addEventListener('click',()=>{clearInterval(snakeTimer);snakeRun
 document.querySelectorAll('[data-snake]').forEach(button=>button.addEventListener('click',()=>snakeDirection(button.dataset.snake)));
 let snakeTouch=null;snakeCanvas.addEventListener('pointerdown',e=>{snakeTouch={x:e.clientX,y:e.clientY};snakeCanvas.setPointerCapture(e.pointerId)});snakeCanvas.addEventListener('pointerup',e=>{if(!snakeTouch)return;const dx=e.clientX-snakeTouch.x,dy=e.clientY-snakeTouch.y;if(Math.max(Math.abs(dx),Math.abs(dy))>16)snakeDirection(Math.abs(dx)>Math.abs(dy)?dx>0?'right':'left':dy>0?'down':'up');snakeTouch=null});
 
-// Memory: cards flip in 3D and each pair counts as one turn.
-const symbols=['★','◆','☀','♥','♫','⚡'];let memoryDeck=[],memoryOpen=[],memoryPairs=0,memoryTurns=0,memoryLocked=false,memoryTimer=null;
+// Memory: a single card face keeps taps reliable across browsers and touch devices.
+const symbols=['★','◆','☀','♥','♫','⚡','✿','♣'];let memoryDeck=[],memoryOpen=[],memoryPairs=0,memoryTurns=0,memoryLocked=false,memoryTimer=null,memoryGeneration=0;
 function shuffle(array){for(let i=array.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[array[i],array[j]]=[array[j],array[i]]}return array}
-function newMemory(){clearTimeout(memoryTimer);memoryDeck=shuffle([...symbols,...symbols]);memoryOpen=[];memoryPairs=0;memoryTurns=0;memoryLocked=false;$('memoryPairs').textContent='0 / 6 PAARE';$('memoryTurns').textContent='0 / 15 VERSUCHE';$('memoryStatus').textContent='Dreh zwei Karten um.';$('memoryStatus').className='status';$('memoryGrid').replaceChildren();memoryDeck.forEach((symbol,index)=>{const button=document.createElement('button');button.type='button';button.className='memory-card';button.setAttribute('aria-label',`Karte ${index+1}, verdeckt`);button.innerHTML='<span class="face back" aria-hidden="true">M</span><span class="face front" aria-hidden="true"></span>';button.querySelector('.front').textContent=symbol;button.addEventListener('click',()=>flipCard(index));$('memoryGrid').append(button)})}
-function flipCard(index){if(memoryLocked||memoryOpen.includes(index))return;const card=$('memoryGrid').children[index];if(card.classList.contains('matched'))return;card.classList.add('open');card.setAttribute('aria-label',`Karte ${index+1}, ${memoryDeck[index]}`);memoryOpen.push(index);tone(360,.07);if(memoryOpen.length<2)return;memoryTurns++;$('memoryTurns').textContent=`${memoryTurns} / 15 VERSUCHE`;const [a,b]=memoryOpen;if(memoryDeck[a]===memoryDeck[b]){for(const n of memoryOpen){const matchedCard=$('memoryGrid').children[n];matchedCard.classList.add('matched');matchedCard.disabled=true}memoryPairs++;$('memoryPairs').textContent=`${memoryPairs} / 6 PAARE`;memoryOpen=[];tone(720,.12,'triangle');if(memoryPairs===6){memoryLocked=true;$('memoryStatus').textContent='Alle Paare gefunden!';$('memoryStatus').className='status good';setTimeout(()=>checkpoint(2,'MEMORY GESCHAFFT!','Nur noch ein Spiel bis zu deinem Geschenk. Jetzt kommt der Endspurt!'),650)}else if(memoryTurns>=15)memoryFail()}else{memoryLocked=true;memoryTimer=setTimeout(()=>{for(const n of memoryOpen){const hiddenCard=$('memoryGrid').children[n];hiddenCard.classList.remove('open');hiddenCard.setAttribute('aria-label',`Karte ${n+1}, verdeckt`)}memoryOpen=[];memoryLocked=false;if(memoryTurns>=15)memoryFail()},850)}}
-function memoryFail(){memoryLocked=true;$('memoryStatus').textContent='15 Versuche vorbei. Misch neu und probier’s nochmal.';$('memoryStatus').className='status bad';tone(180,.24,'sawtooth')}
+function newMemory(){
+  clearTimeout(memoryTimer);memoryGeneration++;
+  memoryDeck=shuffle([...symbols,...symbols]);memoryOpen=[];memoryPairs=0;memoryTurns=0;memoryLocked=false;
+  $('memoryPairs').textContent='0 / 8 PAARE';$('memoryTurns').textContent='0 ZÜGE';
+  $('memoryStatus').textContent='Dreh zwei Karten um.';$('memoryStatus').className='status';
+  $('memoryGrid').replaceChildren();
+  memoryDeck.forEach((symbol,index)=>{
+    const card=document.createElement('button');card.type='button';card.className='memory-card';card.textContent='M';
+    card.setAttribute('aria-label',`Karte ${index+1}, verdeckt`);
+    card.addEventListener('click',()=>flipCard(index));$('memoryGrid').append(card);
+  });
+}
+function flipCard(index){
+  if(memoryLocked||memoryOpen.includes(index))return;
+  const card=$('memoryGrid').children[index];if(!card||card.classList.contains('matched'))return;
+  card.textContent=memoryDeck[index];card.classList.add('open');card.setAttribute('aria-label',`Karte ${index+1}, ${memoryDeck[index]}`);
+  memoryOpen.push(index);tone(360,.07);
+  if(memoryOpen.length!==2)return;
+  memoryLocked=true;memoryTurns++;$('memoryTurns').textContent=`${memoryTurns} ZÜGE`;
+  const [a,b]=memoryOpen,generation=memoryGeneration;
+  if(memoryDeck[a]===memoryDeck[b]){
+    memoryTimer=setTimeout(()=>{
+      if(generation!==memoryGeneration)return;
+      for(const n of [a,b]){const matchedCard=$('memoryGrid').children[n];matchedCard.classList.add('matched');matchedCard.disabled=true}
+      memoryPairs++;$('memoryPairs').textContent=`${memoryPairs} / 8 PAARE`;
+      memoryOpen=[];tone(720,.12,'triangle');
+      if(memoryPairs===8){$('memoryStatus').textContent='Alle acht Paare gefunden!';$('memoryStatus').className='status good';setTimeout(()=>{if(generation===memoryGeneration)checkpoint(2,'MEMORY GESCHAFFT!','Nur noch ein Spiel bis zu deinem Geschenk. Jetzt kommt der Endspurt!')},550)}
+      else{memoryLocked=false;$('memoryStatus').textContent='Paar gefunden! Weiter so.';$('memoryStatus').className='status good'}
+    },300);
+  }else{
+    $('memoryStatus').textContent='Nicht gleich – gleich sind sie wieder verdeckt.';$('memoryStatus').className='status';
+    memoryTimer=setTimeout(()=>{
+      if(generation!==memoryGeneration)return;
+      for(const n of [a,b]){const hiddenCard=$('memoryGrid').children[n];hiddenCard.textContent='M';hiddenCard.classList.remove('open');hiddenCard.setAttribute('aria-label',`Karte ${n+1}, verdeckt`)}
+      memoryOpen=[];memoryLocked=false;$('memoryStatus').textContent='Wo waren die Symbole?';
+    },1050);
+  }
+}
 $('memoryRestart').addEventListener('click',newMemory);
 
 // Tetris: seven-bag randomizer, ghost piece, wall kicks, next piece and six-line finish.
