@@ -26,3 +26,6 @@ footer{display:flex;justify-content:space-between;gap:16px;padding:25px 0 32px;c
 .memory-card:not(:disabled):active{transform:scale(.94)}
 @keyframes memoryReveal{from{transform:scaleX(.3);opacity:.6}to{transform:scaleX(1.025);opacity:1}}
 @media(max-width:680px){.memory-card{aspect-ratio:1;border-radius:10px;font-size:clamp(1.6rem,7vw,2.5rem)}.memory-grid{gap:8px}.memory-foot{align-items:center}.memory-foot .status{font-size:.7rem}.text-button{font-size:.62rem;white-space:nowrap}}
+
+/* Keep the small mission label fully legible on phones. */
+@media(max-width:680px){.hero-content .title-star{display:none}}
