@@ -3,7 +3,7 @@ const $=id=>document.getElementById(id);
 const screens=['intro','snakeScreen','memoryScreen','tetrisScreen','finalScreen'];
 const storageKey='marina-28-progress-v2';
 let stage=Math.max(0,Math.min(3,Number(localStorage.getItem(storageKey))||0));
-let soundOn=false,audioContext=null;
+let soundOn=true,audioContext=null;
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function tone(freq=440,duration=.12,type='sine',gain=.045){
@@ -57,6 +57,11 @@ $('soundBtn').addEventListener('click',()=>{
   $('soundText').textContent=soundOn?'TON AN':'TON AUS';
   if(soundOn){tone(880,.1);startMusic()}else stopMusic();
 });
+// Mobile browsers require a user gesture before Web Audio can play.
+function unlockMusic(event){if(!event.target.closest?.('#soundBtn'))startMusic()}
+document.addEventListener('pointerdown',unlockMusic,{passive:true});
+document.addEventListener('keydown',unlockMusic);
+document.addEventListener('click',unlockMusic);
 
 function updateTrack(index){const percent=index*25;$('trackFill').style.width=`${percent}%`;$('trackKart').style.left=`${percent}%`;document.querySelectorAll('.stop').forEach((node,i)=>{node.classList.toggle('done',i<index);node.classList.toggle('current',i===index)})}
 function showScreen(id){
