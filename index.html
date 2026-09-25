@@ -8,14 +8,14 @@
   <title>Marina 28 · Das Geburtstagsrennen</title>
   <link rel="preload" as="image" href="assets/marina-race.webp">
   <link rel="stylesheet" href="style.css?v=mobile-title-20260923-1">
-  <script src="app.js?v=arcade-music-20260923-1" defer></script>
+  <script src="app.js?v=arcade-audio-default-20260925-1" defer></script>
 </head>
 <body>
   <div class="ambient" aria-hidden="true"><div class="ambient-grid"></div><div class="orb orb-a"></div><div class="orb orb-b"></div><div class="speed-lines"></div></div>
   <div class="app">
     <header class="topbar">
       <div class="brand"><span class="brand-icon">M<span>★</span></span><span>MARINA<span class="brand-year">/28</span><small>THE BIRTHDAY RACE</small></span></div>
-      <button class="sound-btn" id="soundBtn" type="button" aria-label="Ton einschalten" aria-pressed="false"><span class="sound-icon">♫</span><span id="soundText">TON AUS</span></button>
+      <button class="sound-btn" id="soundBtn" type="button" aria-label="Ton ausschalten" aria-pressed="true"><span class="sound-icon">♫</span><span id="soundText">TON AN</span></button>
     </header>
     <nav class="race-track" aria-label="Dein Fortschritt">
       <div class="race-track-line"><div class="race-track-fill" id="trackFill"></div><div class="tiny-kart" id="trackKart" aria-hidden="true">🏎️</div></div>
@@ -25,7 +25,7 @@
       <section class="screen active" id="intro" aria-labelledby="introTitle">
         <div class="hero-card">
           <div class="hero-art"><img src="assets/marina-race.webp" alt="Marina im violetten Kart fährt der 30 auf einem Dreirad davon."><span class="hero-sticker sticker-one">LEVEL 28<br>UNLOCKED</span><span class="hero-sticker sticker-two">30? <b>ZU LANGSAM!</b></span><span class="hero-checkers" aria-hidden="true"></span></div>
-          <div class="hero-content"><div class="micro">// EINE MISSION NUR FÜR DICH</div><h1 id="introTitle">HEY<br><em>MARINA!</em><span class="title-star">✳</span></h1><p class="hero-lead">Die 30 jagt dich. Dein Geschenk wartet im Ziel. Dazwischen liegen <strong>drei Spiele</strong> – und du sitzt am Steuer.</p><div class="challenge-chips"><span>🐍 SNAKE</span><span>✦ MEMORY</span><span>▦ TETRIS</span></div><button class="action primary" id="startBtn" type="button"><span>RENNEN STARTEN</span><b>↗</b></button><p class="tiny-note">Pausen sind erlaubt. Dein Fortschritt bleibt auf diesem Gerät gespeichert.</p></div>
+          <div class="hero-content"><div class="micro">// EINE MISSION NUR FÜR DICH</div><h1 id="introTitle">HEY<br><em>MARINA!</em><span class="title-star">✳</span></h1><p class="hero-lead">Die 30 jagt dich. Dein Geschenk wartet im Ziel. Dazwischen liegen <strong>drei Spiele</strong> – und du sitzt am Steuer.</p><div class="challenge-chips"><span>🐍 SNAKE</span><span>✦ MEMORY</span><span>▦ TETRIS</span></div><button class="action primary" id="startBtn" type="button"><span>RENNEN STARTEN</span><b>↗</b></button><p class="tiny-note">Musik startet beim ersten Tippen. Pausen sind erlaubt; dein Fortschritt bleibt auf diesem Gerät gespeichert.</p></div>
         </div>
       </section>
       <section class="screen game-screen" id="snakeScreen" aria-labelledby="snakeTitle">
